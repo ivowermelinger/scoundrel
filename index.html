@@ -10,8 +10,13 @@
 </head>
 
 <body>
-  <div x-data="engine">
-    <button x-on:click="start">Start</button>
+  <div x-data="engine" class="engine">
+    <div class="dungeon">
+      <div class="card card--stack"></div>
+    </div>
+    <div class="room"></div>
+    <div class="discard"></div>
+    <div class="hand"></div>
   </div>
 </body>
 
