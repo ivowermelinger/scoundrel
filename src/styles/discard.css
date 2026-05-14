@@ -1,8 +1,7 @@
-.room {
-    grid-area: room;
-    background: #5a6972;
+.discard {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: #000;
 }

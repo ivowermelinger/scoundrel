@@ -10,10 +10,16 @@
 </head>
 
 <body>
+  <div class="engine__warning">
+    <p>Turn your device to landscape mode to play.</p>
+  </div>
+
   <div x-data="engine" class="engine">
     <div class="info" x-text="health"></div>
     <div class="dungeon">
-      <div class="card card--stack"></div>
+      <div class="card card--stack">
+        <div x-text="cards.length"></div>
+      </div>
     </div>
 
     <div class="room">
@@ -27,8 +33,8 @@
 
           <div class="card__inner">
             <div class="card__actions" x-show="card.suit === 'CLUBS' || card.suit === 'SPADES'">
-              <button x-on:click="fightBareHanded">Fight bare handed</button>
-              <button x-on:click="fightWithWeapon">Use weapon</button>
+              <button x-on:click.stop="fightBareHanded">Fight bare handed</button>
+              <button x-show="selectedWeapon" x-on:click.stop="fightWithWeapon">Use weapon</button>
             </div>
           </div>
 
@@ -41,7 +47,6 @@
       </template>
     </div>
 
-    <div class="discard"></div>
     <div class="hand">
       <template x-if="selectedWeapon">
         <div class="card">
@@ -54,10 +59,15 @@
 
           <div class="card__info">
             <div class="card__suit" x-text="selectedWeapon.suit"></div>
+            <div class="card__value" x-text="selectedWeapon.value"></div>
             <div class="card__name" x-text="selectedWeapon.display"></div>
           </div>
         </div>
       </template>
+    </div>
+
+    <div class="discard">
+      <div x-text="discardPile.length"></div>
     </div>
   </div>
 </body>

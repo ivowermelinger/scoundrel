@@ -6,6 +6,7 @@ import './styles/app.css';
 import './styles/engine.css';
 import './styles/card.css';
 import './styles/room.css';
+import './styles/discard.css';
 
 Alpine.data('engine', engine);
 

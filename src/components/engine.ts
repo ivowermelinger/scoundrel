@@ -2,14 +2,15 @@ import type { Card } from '../types/Card';
 import { cards } from '../data/cards';
 
 export default () => ({
+    finished: false,
     cards: cards as Card[],
     maxHealth: 20,
-    currentWeaponPool: [] as Card[],
+    slayedEnemies: [] as Card[],
     health: 20,
     score: 0,
     selectedWeapon: null,
     room: [] as Card[],
-    discard: [] as Card[],
+    discardPile: [] as Card[],
 
 
     init() {
@@ -18,12 +19,21 @@ export default () => ({
     },
 
     fillRoom() {
+        if (this.finished) {
+            return;
+        }
+
+        if (this.cards.length === 0) {
+            this.finished = true;
+            return;
+        }
+
         const needed = 4 - this.room.length;
         this.room.push(...this.cards.splice(0, needed));
     },
 
     pickCard(e: Event) {
-        if (this.room.length <= 1) return;
+        if (this.room.length <= 1 || this.finished) return;
 
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
@@ -31,9 +41,6 @@ export default () => ({
         if (['CLUBS', 'SPADES'].includes(card.suit)) {
             return;
         }
-
-        // Remove card from room
-        this.room = this.room.filter((c: Card) => c.id !== card.id);
 
         switch (card.suit) {
             case 'DIAMONDS':
@@ -49,25 +56,31 @@ export default () => ({
                 break;
         }
 
-        if (this.room.length === 1) {
-            this.fillRoom();
-        }
+        this.discardCards(card);
+        this.checkGameEnd();
     },
 
 
     fightBareHanded(e: Event) {
+        if (this.finished) return;
+
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
 
         console.log('Bare handed fight', card);
         this.health -= card.value;
+        this.discardCards(card);
+        this.checkGameEnd();
     },
 
     fightWithWeapon(e: Event) {
+        if (this.finished) return;
+
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
 
         console.log('Weapon fight', card);
+        this.checkGameEnd();
     },
 
     /**
@@ -86,6 +99,31 @@ export default () => ({
         }
 
         return array;
+    },
+
+    checkGameEnd() {
+        if (this.health > 0 && this.room.length === 1) {
+            this.fillRoom();
+            return;
+        }
+
+        if (this.health > 0 && this.cards.length === 0) {
+            console.log('You win!');
+            this.finished = true;
+            return;
+        }
+
+        if (this.health <= 0) {
+            console.log('Game over');
+            this.finished = true;
+            this.health = 0;
+        }
+    },
+
+    discardCards(cards: Card[] | Card) {
+        const cardsArray = Array.isArray(cards) ? cards : [cards];
+        this.room = this.room.filter((c: Card) => !cardsArray.some((card: Card) => card.id === c.id));
+        this.discardPile.push(...cardsArray);
     },
 
     getCardById(el: HTMLElement) {
