@@ -2,8 +2,6 @@ import type { Card } from '../types/Card';
 
 import { getInitialState, shuffle, saveGameState, loadGameState } from '../ts/Engine';
 
-
-
 export default () => ({
     ...getInitialState(),
     maxHealth: 20,
@@ -29,7 +27,9 @@ export default () => ({
         }
 
         if (this.cards.length === 0) {
-            this.isFinished = true;
+            if (this.room.length === 0) {
+                this.isFinished = true;
+            }
             return;
         }
 
@@ -44,7 +44,8 @@ export default () => ({
     },
 
     pickCard(e: Event) {
-        if (this.room.length <= 1 || this.isFinished) return;
+        if (this.isFinished) return;
+        if (this.room.length <= 1 && this.cards.length > 0) return;
 
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
@@ -62,6 +63,12 @@ export default () => ({
                 this.selectedWeapon = card;
                 break;
             case 'HEARTS':
+                if (this.potionUsed) {
+                    break;
+                }
+
+                this.potionUsed = true;
+
                 if (this.health + card.value > this.maxHealth) {
                     this.health = this.maxHealth;
                 } else {
@@ -133,6 +140,7 @@ export default () => ({
 
         if (this.health > 0 && this.room.length === 1) {
             this.skippedRoom = false;
+            this.potionUsed = false;
             this.fillRoom();
             saveGameState(this);
             return;

@@ -9,6 +9,7 @@
     grid-template-areas:
         'dungeon room room'
         'hand hand discard';
+    padding: 16px;
 
     * {
         min-height: 0;
@@ -17,7 +18,6 @@
 
     .hand {
         grid-area: hand;
-        background: rgb(238, 201, 201);
     }
 
     .dungeon {

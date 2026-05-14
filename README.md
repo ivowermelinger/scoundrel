@@ -1,6 +1,6 @@
 # Scoundrel
 
-A browser-based implementation of [Scoundrel](https://www.lookout-games.de/scoundrel), the single-player card dungeon-crawler by Zach Gage and Kurt Bieg.
+A browser-based implementation of Scoundrel, the single-player card dungeon-crawler by Zach Gage and Kurt Bieg.
 
 ## How to play
 

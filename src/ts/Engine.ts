@@ -14,6 +14,7 @@ export const getInitialState = () => ({
     lastSlayedValue: null as null | number,
     skippedRoom: false,
     isFinished: false,
+    potionUsed: false,
 });
 
 export const shuffle = (array: Card[]) => {
