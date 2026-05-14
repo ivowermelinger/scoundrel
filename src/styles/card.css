@@ -11,12 +11,10 @@
     padding: 10px;
     position: relative;
     isolation: isolate;
-    cursor: pointer;
+    user-select: none;
 
-    &:hover {
-        .card__actions {
-            opacity: 1;
-        }
+    &--interactive {
+        cursor: pointer;
     }
 
     &--stack {
@@ -42,7 +40,8 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        /** opacity: 0; */
+        user-select: none;
+        transition: opacity 250ms ease-in-out;
     }
 
     &__inner {

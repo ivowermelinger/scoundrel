@@ -1,12 +1,10 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    background-color: #16171d;
-  }
+  --layer-dialog: 100;
+  --layer-warning: 200;
+  --primary-color: #16171d;
+  --min-aspect-ratio: 16/12;
 }
 
 body {
@@ -19,9 +17,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-color);
 }
 
-:root {
-  --layer-dialog: 100;
-  --layer-warning: 200;
+
+@media (min-aspect-ratio: var(--min-aspect-ratio)) {
+  body {
+    user-select: none;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }

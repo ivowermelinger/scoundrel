@@ -1,0 +1,13 @@
+.hand {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+
+    &__slayed {
+        display: grid;
+        grid-template-columns: repeat(16, 1fr);
+        gap: 0;
+        overflow: hidden;
+        border-radius: 16px;
+    }
+}

@@ -1,0 +1,16 @@
+.dialog {
+    max-width: 480px;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    background-color: transparent;
+    text-align: center;
+
+    h1 {
+        margin-bottom: 1rem;
+    }
+}
+
+.dialog::backdrop {
+    background-color: var(--primary-color);
+}

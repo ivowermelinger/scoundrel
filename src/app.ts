@@ -7,6 +7,8 @@ import './styles/engine.css';
 import './styles/card.css';
 import './styles/room.css';
 import './styles/discard.css';
+import './styles/hand.css';
+import './styles/dialog.css';
 
 Alpine.data('engine', engine);
 

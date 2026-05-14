@@ -7,6 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>scoundrel</title>
   <script type="module" src="/src/app.ts"></script>
+
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,8 +20,13 @@
     <p>Turn your device to landscape mode to play.</p>
   </div>
 
-  <div x-data="engine" class="engine">
-    <div class="info" x-text="health"></div>
+  <div x-cloak x-data="engine" class="engine">
+    <dialog class="dialog" x-cloak x-ref="gameOverDialog">
+      <h1>Game Over</h1>
+
+      <button x-on:click="restart">Restart</button>
+    </dialog>
+
     <div class="dungeon">
       <div class="card card--stack">
         <div x-text="cards.length"></div>
@@ -24,8 +35,8 @@
 
     <div class="room">
       <template x-for="card in room">
-        <div class="card" role="button" :class="`card--${card.suit.toLowerCase()}`" x-on:click="pickCard"
-          :data-card-id="card.id">
+        <div class="card card--interactive" role="button" :class="`card--${card.suit.toLowerCase()}`"
+          x-on:click="pickCard" :data-card-id="card.id">
           <div class="card__info">
             <div class="card__name" x-text="card.display"></div>
             <div class="card__suit" x-text="card.suit"></div>
@@ -34,7 +45,9 @@
           <div class="card__inner">
             <div class="card__actions" x-show="card.suit === 'CLUBS' || card.suit === 'SPADES'">
               <button x-on:click.stop="fightBareHanded">Fight bare handed</button>
-              <button x-show="selectedWeapon" x-on:click.stop="fightWithWeapon">Use weapon</button>
+              <button x-show="selectedWeapon && (lastSlayedValue === null || lastSlayedValue >= card.value)"
+                x-on:click.stop="fightWithWeapon">Use
+                weapon</button>
             </div>
           </div>
 
@@ -64,11 +77,34 @@
           </div>
         </div>
       </template>
+
+      <div class="hand__slayed">
+        <template x-for="card in slayedEnemies">
+          <div class="card">
+            <div class="card__info">
+              <div class="card__name" x-text="card.display"></div>
+              <div class="card__suit" x-text="card.suit"></div>
+            </div>
+
+            <picture class="card__image"></picture>
+
+            <div class="card__info">
+              <div class="card__suit" x-text="card.suit"></div>
+              <div class="card__value" x-text="card.value"></div>
+              <div class="card__name" x-text="card.display"></div>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
 
     <div class="discard">
       <div x-text="discardPile.length"></div>
     </div>
+
+    <div class="info" x-text="health"></div>
+    <button x-on:click="restart">Restart</button>
+    <button x-show="room.length === 4 && !skippedRoom" x-on:click="skipRoom">Skip room</button>
   </div>
 </body>
 
