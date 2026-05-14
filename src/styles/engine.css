@@ -2,7 +2,9 @@
     display: grid;
     grid-template: repeat(2, 1fr) / 1fr 2fr 1fr;
     height: 100svh;
+    max-height: 100svh;
     width: 100svw;
+    max-width: 100svw;
     grid-template-areas:
         'dungeon room room'
         'hand hand discard';
@@ -19,12 +21,6 @@
 
     .dungeon {
         grid-area: dungeon;
-    }
-
-    .room {
-        grid-area: room;
-        background: #5a6972;
-
     }
 
     .discard {

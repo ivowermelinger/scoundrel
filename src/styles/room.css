@@ -1,0 +1,8 @@
+.room {
+    grid-area: room;
+    background: #5a6972;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-start;
+}
