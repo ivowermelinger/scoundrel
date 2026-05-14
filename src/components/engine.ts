@@ -56,8 +56,11 @@ export default () => ({
 
         switch (card.suit) {
             case 'DIAMONDS':
-                this.selectedWeapon && this.discardCards(this.selectedWeapon);
-                this.discardCards(this.slayedEnemies);
+                if (this.selectedWeapon) {
+                    this.discardPile.push(this.selectedWeapon);
+                }
+
+                this.discardPile.push(...this.slayedEnemies);
 
                 this.slayedEnemies = [];
                 this.selectedWeapon = card;
@@ -146,7 +149,7 @@ export default () => ({
             return;
         }
 
-        if (this.health > 0 && this.cards.length === 0) {
+        if (this.health > 0 && this.cards.length === 0 && this.room.length <= 1) {
             this.isFinished = true;
             saveGameState(this);
             return;
