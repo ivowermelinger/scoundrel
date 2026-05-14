@@ -1,0 +1,21 @@
+:root {
+  color-scheme: light dark;
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color: #16171d;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100svh;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
