@@ -6,7 +6,6 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>scoundrel</title>
-  <script type="module" src="/src/app.ts"></script>
 
   <style>
     [x-cloak] {
@@ -114,9 +113,11 @@
     </div>
 
     <div class="info" x-text="health"></div>
-    <button x-on:click="restart">Restart</button>
+    <button x-on:click="restart()">Restart</button>
     <button x-show="room.length === 4 && !skippedRoom" x-on:click="skipRoom">Skip room</button>
   </div>
+
+  <script type="module" src="/src/app.ts"></script>
 </body>
 
 </html>

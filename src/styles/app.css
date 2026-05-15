@@ -4,7 +4,6 @@
   --layer-dialog: 100;
   --layer-warning: 200;
   --primary-color: #16171d;
-  --min-aspect-ratio: 16/12;
 }
 
 body {
@@ -21,7 +20,7 @@ body {
 }
 
 
-@media (min-aspect-ratio: var(--min-aspect-ratio)) {
+@media (max-aspect-ratio: 16/10) {
   body {
     user-select: none;
     pointer-events: none;

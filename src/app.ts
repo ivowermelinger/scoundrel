@@ -13,5 +13,4 @@ import './styles/dialog.css';
 import.meta.glob('./assets/images/**/*', { eager: true, query: '?url', import: 'default' });
 
 Alpine.data('engine', engine);
-
 Alpine.start();

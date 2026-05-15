@@ -34,7 +34,7 @@ export const shuffle = (array: Card[]) => {
 
 export const saveGameState = (element: GameState) => {
     const state = Object.fromEntries(
-        Object.keys(getInitialState()).map(k => [k, element[k]])
+        Object.keys(getInitialState()).map(k => [k, element[k as keyof GameState]])
     );
     localStorage.setItem('gameState', JSON.stringify(state));
 };

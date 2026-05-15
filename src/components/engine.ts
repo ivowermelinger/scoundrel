@@ -16,7 +16,7 @@ export default () => ({
         }
 
         if (this.isFinished && this.health <= 0) {
-            this.$refs.gameOverDialog.showModal();
+            (this as any).$refs.gameOverDialog.showModal();
         }
     },
 
@@ -106,7 +106,7 @@ export default () => ({
             return;
         }
 
-        const damageToDeal = this.selectedWeapon.value - card.value;
+        const damageToDeal = this.selectedWeapon!.value - card.value;
 
         if (damageToDeal < 0) {
             this.health += damageToDeal;
@@ -156,7 +156,7 @@ export default () => ({
         }
 
         if (this.health <= 0) {
-            this.$refs.gameOverDialog.showModal();
+            (this as any).$refs.gameOverDialog.showModal();
             this.isFinished = true;
             this.health = 0;
         }
