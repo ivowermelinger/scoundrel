@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>scoundrel</title>
 
+  <link rel="preconnect" href="https://fonts.bunny.net">
+  <link href="https://fonts.bunny.net/css?family=radio-canada-big:400,600" rel="stylesheet" />
+
   <style>
     [x-cloak] {
       display: none !important;
@@ -38,7 +41,7 @@
           x-on:click="pickCard" :data-card-id="card.id">
           <div class="card__info">
             <div class="card__name" x-text="card.display"></div>
-            <div class="card__suit" x-text="card.suit"></div>
+            <div class="card__suit" :style="`mask-image: url(/src/assets/svg/${card.suit.toLowerCase()}.svg)`"></div>
           </div>
 
           <template x-if="card.image">
@@ -57,7 +60,7 @@
           </div>
 
           <div class="card__info">
-            <div class="card__suit" x-text="card.suit"></div>
+            <div class="card__suit" :style="`mask-image: url(/src/assets/svg/${card.suit.toLowerCase()}.svg)`"></div>
             <div class="card__name" x-text="card.display"></div>
           </div>
         </div>
@@ -66,10 +69,11 @@
 
     <div class="hand">
       <template x-if="selectedWeapon">
-        <div class="card">
+        <div class="card" :class="`card--${selectedWeapon.suit.toLowerCase()}`">
           <div class="card__info">
             <div class="card__name" x-text="selectedWeapon.display"></div>
-            <div class="card__suit" x-text="selectedWeapon.suit"></div>
+            <div class="card__suit"
+              :style="`mask-image: url(/src/assets/svg/${selectedWeapon.suit.toLowerCase()}.svg)`"></div>
           </div>
 
           <template x-if="selectedWeapon.image">
@@ -79,7 +83,8 @@
           </template>
 
           <div class="card__info">
-            <div class="card__suit" x-text="selectedWeapon.suit"></div>
+            <div class="card__suit"
+              :style="`mask-image: url(/src/assets/svg/${selectedWeapon.suit.toLowerCase()}.svg)`"></div>
             <div class="card__name" x-text="selectedWeapon.display"></div>
           </div>
         </div>
@@ -87,10 +92,10 @@
 
       <div class="hand__slayed">
         <template x-for="card in slayedEnemies">
-          <div class="card">
+          <div class="card" :class="`card--${card.suit.toLowerCase()}`">
             <div class="card__info">
               <div class="card__name" x-text="card.display"></div>
-              <div class="card__suit" x-text="card.suit"></div>
+              <div class="card__suit" :style="`mask-image: url(/src/assets/svg/${card.suit.toLowerCase()}.svg)`"></div>
             </div>
 
             <template x-if="card.image">
@@ -100,7 +105,7 @@
             </template>
 
             <div class="card__info">
-              <div class="card__suit" x-text="card.suit"></div>
+              <div class="card__suit" :style="`mask-image: url(/src/assets/svg/${card.suit.toLowerCase()}.svg)`"></div>
               <div class="card__name" x-text="card.display"></div>
             </div>
           </div>
