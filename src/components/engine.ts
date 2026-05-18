@@ -1,51 +1,53 @@
 import type { Card } from '../types/Card';
+import type gameState from '../stores/gameState';
 
-import { getInitialState, shuffle, saveGameState, loadGameState } from '../ts/Engine';
+type GameState = ReturnType<typeof gameState>;
 
 export default () => ({
-    ...getInitialState(),
     maxHealth: 20,
+    gs: {} as GameState,
 
     init() {
-        const loaded = loadGameState(this);
+        this.gs = this.$store.gameState;
+        const loaded = this.gs.loadGameState();
 
-        if (!loaded) {
-            this.cards = shuffle(this.cards);
+        if (loaded) {
+            Object.assign(this.gs, loaded);
+        } else {
+            this.gs.shuffle(this.gs.cards);
             this.fillRoom();
-            saveGameState(this);
+            this.gs.saveGameState();
         }
 
-        if (this.isFinished && this.health <= 0) {
+        if (this.gs.isFinished && this.gs.health <= 0) {
             (this as any).$refs.gameOverDialog.showModal();
         }
     },
 
-
     fillRoom() {
-        if (this.isFinished) {
+        if (this.gs.isFinished) {
             return;
         }
 
-        if (this.cards.length === 0) {
-            if (this.room.length === 0) {
-                this.isFinished = true;
+        if (this.gs.cards.length === 0) {
+            if (this.gs.room.length === 0) {
+                this.gs.isFinished = true;
             }
             return;
         }
 
-        const needed = 4 - this.room.length;
-        this.room.push(...this.cards.splice(0, needed));
+        const needed = 4 - this.gs.room.length;
+        this.gs.room.push(...this.gs.cards.splice(0, needed));
     },
-
 
     getCardById(el: HTMLElement) {
         const id = el.closest<HTMLElement>('[data-card-id]')?.dataset.cardId;
-        return this.room.find((c: Card) => c.id === id);
+        return this.gs.room.find((c: Card) => c.id === id);
     },
 
     pickCard(e: Event) {
-        if (this.isFinished) return;
-        if (this.room.length <= 1 && this.cards.length > 0) return;
+        if (this.gs.isFinished) return;
+        if (this.gs.room.length <= 1 && this.gs.cards.length > 0) return;
 
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
@@ -56,26 +58,25 @@ export default () => ({
 
         switch (card.suit) {
             case 'DIAMONDS':
-                if (this.selectedWeapon) {
-                    this.discardPile.push(this.selectedWeapon);
+                if (this.gs.selectedWeapon) {
+                    this.gs.discardPile.push(this.gs.selectedWeapon);
                 }
 
-                this.discardPile.push(...this.slayedEnemies);
-
-                this.slayedEnemies = [];
-                this.selectedWeapon = card;
+                this.gs.discardPile.push(...this.gs.slayedEnemies);
+                this.gs.slayedEnemies = [];
+                this.gs.selectedWeapon = card;
                 break;
             case 'HEARTS':
-                if (this.potionUsed) {
+                if (this.gs.potionUsed) {
                     break;
                 }
 
-                this.potionUsed = true;
+                this.gs.potionUsed = true;
 
-                if (this.health + card.value > this.maxHealth) {
-                    this.health = this.maxHealth;
+                if (this.gs.health + card.value > this.maxHealth) {
+                    this.gs.health = this.maxHealth;
                 } else {
-                    this.health += card.value;
+                    this.gs.health += card.value;
                 }
 
                 break;
@@ -86,84 +87,85 @@ export default () => ({
     },
 
     fightBareHanded(e: Event) {
-        if (this.isFinished) return;
+        if (this.gs.isFinished) return;
 
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
 
-        this.health -= card.value;
+        this.gs.health -= card.value;
         this.discardCards(card);
         this.checkGameEnd();
     },
 
     fightWithWeapon(e: Event) {
-        if (this.isFinished) return;
+        if (this.gs.isFinished) return;
 
         const card = this.getCardById(e.currentTarget as HTMLElement);
         if (!card) return;
 
-        if (this.lastSlayedValue && this.lastSlayedValue < card.value) {
+        if (this.gs.lastSlayedValue && this.gs.lastSlayedValue < card.value) {
             return;
         }
 
-        const damageToDeal = this.selectedWeapon!.value - card.value;
+        const damageToDeal = this.gs.selectedWeapon!.value - card.value;
 
         if (damageToDeal < 0) {
-            this.health += damageToDeal;
+            this.gs.health += damageToDeal;
         }
 
-        this.room = this.room.filter((c: Card) => c.id !== card.id);
-        this.slayedEnemies.push(card);
+        this.gs.room = this.gs.room.filter((c: Card) => c.id !== card.id);
+        this.gs.slayedEnemies.push(card);
         this.checkGameEnd();
     },
 
     discardCards(cards: Card[] | Card) {
         const cardsArray = Array.isArray(cards) ? cards : [cards];
-        this.room = this.room.filter((c: Card) => !cardsArray.some((card: Card) => card.id === c.id));
-        this.discardPile.push(...cardsArray);
+        this.gs.room = this.gs.room.filter(
+            (c: Card) => !cardsArray.some((card: Card) => card.id === c.id)
+        );
+        this.gs.discardPile.push(...cardsArray);
     },
 
     skipRoom() {
-        if (this.room.length !== 4 || this.skippedRoom) {
+        if (this.gs.room.length !== 4 || this.gs.skippedRoom) {
             return;
         }
 
-        this.skippedRoom = true;
-        const shuffled = shuffle(this.room);
-        this.cards.push(...shuffled);
+        this.gs.skippedRoom = true;
+        const shuffled = this.gs.shuffle(this.gs.room);
+        this.gs.cards.push(...shuffled);
 
-        this.room = [];
+        this.gs.room = [];
         this.fillRoom();
         this.checkGameEnd();
     },
 
     checkGameEnd() {
-        const lastSlayed = this.slayedEnemies[this.slayedEnemies.length - 1];
-        this.lastSlayedValue = lastSlayed?.value || null;
+        const lastSlayed = this.gs.slayedEnemies[this.gs.slayedEnemies.length - 1];
+        this.gs.lastSlayedValue = lastSlayed?.value || null;
 
-        if (this.health > 0 && this.room.length === 1) {
-            this.skippedRoom = false;
-            this.potionUsed = false;
+        if (this.gs.health > 0 && this.gs.room.length === 1) {
+            this.gs.skippedRoom = false;
+            this.gs.potionUsed = false;
             this.fillRoom();
-            saveGameState(this);
+            this.gs.saveGameState();
             return;
         }
 
-        if (this.health > 0 && this.cards.length === 0 && this.room.length <= 1) {
-            this.isFinished = true;
-            saveGameState(this);
+        if (this.gs.health > 0 && this.gs.cards.length === 0 && this.gs.room.length <= 1) {
+            this.gs.isFinished = true;
+            this.gs.saveGameState();
             return;
         }
 
-        if (this.health <= 0) {
+        if (this.gs.health <= 0) {
             (this as any).$refs.gameOverDialog.showModal();
-            this.isFinished = true;
-            this.health = 0;
+            this.gs.isFinished = true;
+            this.gs.health = 0;
         }
 
-        saveGameState(this);
+        this.gs.saveGameState();
     },
-
 
     restart() {
         localStorage.removeItem('gameState');

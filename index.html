@@ -31,12 +31,12 @@
 
     <div class="dungeon" x-ref="dungeon">
       <div class="card card--stack">
-        <div x-text="cards.length"></div>
+        <div x-text="$store.gameState.cards.length"></div>
       </div>
     </div>
 
     <div class="room" x-ref="room">
-      <template x-for="card in room">
+      <template x-for="card in $store.gameState.room">
         <div class="card card--interactive" role="button" :class="`card--${card.suit.toLowerCase()}`"
           x-on:click="pickCard" :data-card-id="card.id">
           <div class="card__info">
@@ -53,7 +53,7 @@
           <div class="card__inner">
             <div class="card__actions" x-show="card.suit === 'CLUBS' || card.suit === 'SPADES'">
               <button x-on:click.stop="fightBareHanded">Fight bare handed</button>
-              <button x-show="selectedWeapon && (lastSlayedValue === null || lastSlayedValue >= card.value)"
+              <button x-show="$store.gameState.selectedWeapon && ($store.gameState.lastSlayedValue === null || $store.gameState.lastSlayedValue >= card.value)"
                 x-on:click.stop="fightWithWeapon">Use
                 weapon</button>
             </div>
@@ -68,30 +68,30 @@
     </div>
 
     <div class="hand" x-ref="hand">
-      <template x-if="selectedWeapon">
-        <div class="card" :class="`card--${selectedWeapon.suit.toLowerCase()}`">
+      <template x-if="$store.gameState.selectedWeapon">
+        <div class="card" :class="`card--${$store.gameState.selectedWeapon.suit.toLowerCase()}`">
           <div class="card__info">
-            <div class="card__name" x-text="selectedWeapon.display"></div>
+            <div class="card__name" x-text="$store.gameState.selectedWeapon.display"></div>
             <div class="card__suit"
-              :style="`mask-image: url(/src/assets/svg/${selectedWeapon.suit.toLowerCase()}.svg)`"></div>
+              :style="`mask-image: url(/src/assets/svg/${$store.gameState.selectedWeapon.suit.toLowerCase()}.svg)`"></div>
           </div>
 
-          <template x-if="selectedWeapon.image">
+          <template x-if="$store.gameState.selectedWeapon.image">
             <picture class="card__image">
-              <img :src="selectedWeapon.image" alt="">
+              <img :src="$store.gameState.selectedWeapon.image" alt="">
             </picture>
           </template>
 
           <div class="card__info">
             <div class="card__suit"
-              :style="`mask-image: url(/src/assets/svg/${selectedWeapon.suit.toLowerCase()}.svg)`"></div>
-            <div class="card__name" x-text="selectedWeapon.display"></div>
+              :style="`mask-image: url(/src/assets/svg/${$store.gameState.selectedWeapon.suit.toLowerCase()}.svg)`"></div>
+            <div class="card__name" x-text="$store.gameState.selectedWeapon.display"></div>
           </div>
         </div>
       </template>
 
       <div class="hand__slayed" x-ref="slayed">
-        <template x-for="card in slayedEnemies">
+        <template x-for="card in $store.gameState.slayedEnemies">
           <div class="card" :class="`card--${card.suit.toLowerCase()}`">
             <div class="card__info">
               <div class="card__name" x-text="card.display"></div>
@@ -115,13 +115,13 @@
 
     <div class="discard" x-ref="discard">
       <div class="card card--discard">
-        <div x-text="discardPile.length"></div>
+        <div x-text="$store.gameState.discardPile.length"></div>
       </div>
     </div>
 
-    <div class="info" x-text="health"></div>
+    <div class="info" x-text="$store.gameState.health"></div>
     <button x-on:click="restart()">Restart</button>
-    <button x-show="room.length === 4 && !skippedRoom" x-on:click="skipRoom">Skip room</button>
+    <button x-show="$store.gameState.room.length === 4 && !$store.gameState.skippedRoom" x-on:click="skipRoom">Skip room</button>
   </div>
 
   <script type="module" src="/src/app.ts"></script>
