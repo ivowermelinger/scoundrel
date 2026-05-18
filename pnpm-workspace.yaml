@@ -2,3 +2,5 @@ allowBuilds:
   cn-font-split: set this to true or false
   koffi: set this to true or false
   protobufjs: set this to true or false
+packages:
+  - '.'
