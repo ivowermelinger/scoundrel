@@ -19,6 +19,10 @@ When only one card remains in the room, the room is cleared and four new cards a
 - Each weapon can only be used against monsters whose value is **lower than or equal to the last monster it killed**.
 - If the monster's value exceeds the weapon's value, you absorb the difference as damage.
 
+## Does this project use AI?
+
+Yes. It's a prototype, all cards were generated with AI.
+
 ## Tech stack
 
 - [Alpine.js](https://alpinejs.dev/) — reactivity & component model  

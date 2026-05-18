@@ -29,13 +29,13 @@
       <button x-on:click="restart">Restart</button>
     </dialog>
 
-    <div class="dungeon">
+    <div class="dungeon" x-ref="dungeon">
       <div class="card card--stack">
         <div x-text="cards.length"></div>
       </div>
     </div>
 
-    <div class="room">
+    <div class="room" x-ref="room">
       <template x-for="card in room">
         <div class="card card--interactive" role="button" :class="`card--${card.suit.toLowerCase()}`"
           x-on:click="pickCard" :data-card-id="card.id">
@@ -67,7 +67,7 @@
       </template>
     </div>
 
-    <div class="hand">
+    <div class="hand" x-ref="hand">
       <template x-if="selectedWeapon">
         <div class="card" :class="`card--${selectedWeapon.suit.toLowerCase()}`">
           <div class="card__info">
@@ -90,7 +90,7 @@
         </div>
       </template>
 
-      <div class="hand__slayed">
+      <div class="hand__slayed" x-ref="slayed">
         <template x-for="card in slayedEnemies">
           <div class="card" :class="`card--${card.suit.toLowerCase()}`">
             <div class="card__info">
@@ -113,8 +113,10 @@
       </div>
     </div>
 
-    <div class="discard">
-      <div x-text="discardPile.length"></div>
+    <div class="discard" x-ref="discard">
+      <div class="card card--discard">
+        <div x-text="discardPile.length"></div>
+      </div>
     </div>
 
     <div class="info" x-text="health"></div>
